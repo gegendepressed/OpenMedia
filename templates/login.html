@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <form>
-        <form method="POST" action="">
+    <form method="POST" action="" class="">
         <fieldset class="form-group">
         <legend class="border-bottom mb-4">Log In</legend>
             <div class="form-group">
@@ -41,7 +40,7 @@
 
         </div>
         
-        <div class="border-top pt-3">
+        <div class="mt-3">
             <small class="text-muted">
                 Create a New Account ? <a class="ml-2" href="{{ url_for('register') }}">Sign Up</a>
             </small>
