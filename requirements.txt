@@ -2,3 +2,4 @@ flask
 flask_wtf
 wtforms
 SQLAlchemy
+email-validator
