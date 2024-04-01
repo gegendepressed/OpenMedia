@@ -18,7 +18,7 @@ class User(Base):
     fullname: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False, unique=True)
     password: Mapped[str] = mapped_column(nullable=False)
-    profile_pic_url: Mapped[Optional[str]] = mapped_column(nullable=True)
+    profile_pic_url: Mapped[Optional[str]] = mapped_column(default="user.png")
     posts: Mapped[List["Posts"]] = relationship(back_populates="owner")
 
     def __str__(self) -> str:

@@ -3,11 +3,9 @@ from models import *
 
 
 with app.app_context():
+    db.create_all()
+
     """
-    db.session.add(u1)
-    db.session.add(u2)
-    db.session.commit()
-    
     u1 = User(
     username="frost",
     fullname="Yash Patil",
@@ -79,6 +77,7 @@ with app.app_context():
     postdata.comments.append(comment2)
 
     db.session.commit()
+
     """
     post1 = db.session.get(Posts, "1")
     for like in post1.likes:
