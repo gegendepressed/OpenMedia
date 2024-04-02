@@ -20,6 +20,22 @@
             </div>
 
             <div class="form-group">
+                {{ form.fullname.label(class="form-control-label") }}
+
+                {% if form.fullname.errors %}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.fullname(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+
+            <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
 
                 {% if form.email.errors %}
@@ -63,6 +79,8 @@
                     {{ form.confirm_password(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+
+            
             
 
             <div class="form-group">

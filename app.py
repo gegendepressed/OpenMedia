@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from form import RegistrationForm, LoginForm
 from models import *
+import bcrypt
+import hashlib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
@@ -8,6 +10,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
 with app.app_context():
     db.create_all()
+salt = bcrypt.gensalt()
 
 
 posts = [
@@ -41,7 +44,11 @@ def about():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        hashed_password = hashlib.sha256(("form.password.data" + "salt").encode('utf-8')).hexdigest()
+        user = User(username = form.username.data, fullname= form.fullname.data, email= form.email.data, password = hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created for {form.username.data}! Go Login Now !', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
