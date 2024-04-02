@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from form import RegistrationForm, LoginForm
 from models import *
-import bcrypt
+
 import hashlib
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
 with app.app_context():
     db.create_all()
-salt = bcrypt.gensalt()
+salt = "mysalt"
 
 
 posts = [

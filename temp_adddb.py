@@ -1,5 +1,7 @@
 from app import app
 from models import *
+from sqlalchemy import select
+from form import User
 
 
 with app.app_context():
@@ -79,8 +81,11 @@ with app.app_context():
     db.session.commit()
 
     """
-    post1 = db.session.get(Posts, "1")
+"""post1 = db.session.get(Posts, "1")
     for like in post1.likes:
         print(like)
     for comment in post1.comments:
-        print(comment)
+        print(comment)"""
+
+stmt = select(User).where(User.c.name == "spongebob")
+print(stmt)
