@@ -1,4 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1> Home Page </h1>
+
+    {% for post in posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
+              <small class="text-muted">{{ datetime.fromtimestamp(post.timestamp).strftime('%d/%m/%Y %H:%M') }}</small>
+            </div>
+            <h2><a class="article-title text-decoration-none" href="#">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.text }}</p>
+          </div>
+        </article>
+    {% endfor %}
 {% endblock %}

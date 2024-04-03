@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from form import RegistrationForm, LoginForm
 from models import *
+from datetime import datetime
 
 import hashlib
 
@@ -32,7 +33,9 @@ posts = [
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', posts=posts)
+    posts = db.session.scalars( select(Posts) ).all()
+
+    return render_template('home.html', posts=posts, datetime=datetime)
 
 
 @app.route("/about")
