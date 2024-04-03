@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, current_user, login_required, 
 import hashlib
 import time
 
+
 login_manager = LoginManager()
 app = Flask(__name__)
 
@@ -82,6 +83,13 @@ def login():
 def logout():
     logout_user()
     return redirect( url_for("home") )
+
+@app.route("/account")
+@login_required
+def account():
+    image_file = url_for('static', filename = current_user.profile_pic_url)
+    return render_template('account.html', title='Your Account', profile_pic_url= image_file)
+
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
