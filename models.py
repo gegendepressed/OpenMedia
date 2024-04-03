@@ -1,32 +1,25 @@
+"""
+    models.py, this module contains class declaration for all the
+    database entities that are used in the app
+"""
+
 from typing import List, Optional
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, func, select
 from sqlalchemy.orm import DeclarativeBase, column_property, Mapped, mapped_column, relationship
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 
-engine = create_engine('sqlite:////tmp/test.db')
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
-Base = declarative_base()
-Base.query = db_session.query_property()
-
-def init_db():
-    # import all modules here that might define models so that
-    # they will be registered properly on the metadata.  Otherwise
-    # you will have to import them first before calling init_db()
-    Base.metadata.create_all(bind=engine)
-
-class Base(DeclarativeBase):
-  pass
+class Base(DeclarativeBase): # pylint: disable=too-few-public-methods
+    """
+    The Base class that holds the metadata/schema for the database
+    """
+    pass
 
 
-
-class User(Base):
-    # The User class whose object represents a user of app, user_account table
+class User(Base): # pylint: disable=too-few-public-methods
+    """
+    The User class whose object represents a user of app, user_account table
+    """
     __tablename__ = "user_account"
 
     username: Mapped[str] = mapped_column(primary_key=True)
@@ -46,19 +39,10 @@ class User(Base):
         )
 
 
-# This table establishes many to many relation between posts table and likes table
-"""
-likes_association_table = Table(
-    "likes_association_table",
-    Base.metadata,
-    Column("post_id", ForeignKey("posts.id")),
-    Column("like_id", ForeignKey("likes.id")),
-)
-"""
-
-
-class Likes(Base):
-    # Table that stores Likes information.
+class Likes(Base): # pylint: disable=too-few-public-methods
+    """
+    The Likes class whose object represents a Like for a post
+    """
     __tablename__ = "likes"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -74,14 +58,17 @@ class Likes(Base):
         )
 
 
-class Posts(Base):
-    # The Post class whose object represents Posts made by users
+class Posts(Base): # pylint: disable=too-few-public-methods
+    """
+    The Post class whose object represents a post made by the user
+    Can contain Title, text and optionally image
+    """
     __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(nullable=False)
-    image: Mapped[str] = mapped_column()
+    image: Mapped[Optional[str]] = mapped_column()
     likes: Mapped[List["Likes"]] = relationship(back_populates="post")
     timestamp: Mapped[int] = mapped_column(nullable=False)
     owner_id: Mapped[str] = mapped_column(ForeignKey("user_account.username"))
@@ -103,8 +90,10 @@ class Posts(Base):
         )
 
 
-class Comments(Base):
-    # The comments class whose objects are post comments
+class Comments(Base): # pylint: disable=too-few-public-methods
+    """
+    The Comments class whose object represents a comment on a Post object
+    """
     __tablename__ = "comments"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -120,6 +109,7 @@ class Comments(Base):
             f"\ntext: {self.text}"
             f"\nPost ID: {self.post_id}"
         )
+
 
 # The db object which is used to access database
 db = SQLAlchemy(model_class=Base)
