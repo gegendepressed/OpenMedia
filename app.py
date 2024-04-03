@@ -89,7 +89,12 @@ def new_post():
     form = PostForm() 
     if form.validate_on_submit():
         timestamp = int(time.time())
-        post = Posts(  title=form.title.data, text=form.content.data,owner=current_user,timestamp=timestamp)
+        post = Posts( 
+                     title=form.title.data, 
+                     text=form.content.data,
+                     owner=current_user,
+                     timestamp=timestamp
+                     )
         db.session.add(post)
         db.session.commit()
         flash('Post Created!', 'success')
