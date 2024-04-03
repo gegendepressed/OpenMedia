@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from sqlalchemy import select
-from models import User
+from models import *
 
 
 class RegistrationForm(FlaskForm):
@@ -13,7 +13,19 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField("Repeat the Password",validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField("Sign Up")
 
+    def validate_username(self, username):
+        result = db.session.execute(select(User.username).where(User.username == username.data)).all()
+        print(result)
+        if result:
+            print("User Exists")
+            raise ValidationError(f"The username {username.data} is taken, please choose a different one")
 
+    def validate_email(self, email):
+        result = db.session.execute(select(User.username).where(User.email == email.data)).all()
+        print(result)
+        if result:
+            print("Email Exists")
+            raise ValidationError(f"The email {email.data} is already used, please choose a different one")
 
 
 class LoginForm(FlaskForm):

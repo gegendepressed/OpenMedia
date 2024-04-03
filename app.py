@@ -10,8 +10,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
 with app.app_context():
     db.create_all()
-salt = "mysalt"
 
+salt = "mysalt"
 
 posts = [
     {
@@ -44,8 +44,13 @@ def about():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = hashlib.sha256(("form.password.data" + "salt").encode('utf-8')).hexdigest()
-        user = User(username = form.username.data, fullname= form.fullname.data, email= form.email.data, password = hashed_password)
+        hashed_password = hashlib.sha256(("form.password.data" + salt).encode('utf-8')).hexdigest()
+        user = User(
+            username=form.username.data,
+            fullname=form.fullname.data,
+            email=form.email.data,
+            password=hashed_password
+        )
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}! Go Login Now !', 'success')
