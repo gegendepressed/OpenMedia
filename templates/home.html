@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1> Home Page </h1>
+
+    {% if current_user.is_authenticated %}
+        <h1 class="mt-2 mb-4"> Welcome, {{ current_user.fullname }}! </h1>
+    {% else %}
+        <h1 class="mt-2 mb-4"> Home Page </h1>
+    {% endif %}
 
     {% for post in posts %}
         <article class="media content-section">

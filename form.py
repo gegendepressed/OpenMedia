@@ -15,21 +15,17 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, username):
         result = db.session.execute(select(User.username).where(User.username == username.data)).all()
-        print(result)
         if result:
-            print("User Exists")
             raise ValidationError(f"The username {username.data} is taken, please choose a different one")
 
     def validate_email(self, email):
         result = db.session.execute(select(User.username).where(User.email == email.data)).all()
-        print(result)
         if result:
-            print("Email Exists")
             raise ValidationError(f"The email {email.data} is already used, please choose a different one")
 
 
 class LoginForm(FlaskForm):
-    email = EmailField('Email Address', validators=[DataRequired(),Email()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('New Password', validators=[DataRequired()] )
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")

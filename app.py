@@ -1,22 +1,29 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, request
 from form import RegistrationForm, LoginForm
 from models import *
 from datetime import datetime
-
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import hashlib
 
+login_manager = LoginManager()
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
+login_manager.init_app(app)
 with app.app_context():
     db.create_all()
 
 salt = "mysalt"
 
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.execute(db.select(User).where(User.username == user_id)).scalar_one()
+
 @app.route("/")
-@app.route("/home")
 def home():
     posts = db.session.scalars( select(Posts) ).all()
 
@@ -28,11 +35,15 @@ def about():
     return render_template('about.html', title='About')
 
 
-@app.route("/register.html", methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = hashlib.sha256(("form.password.data" + salt).encode('utf-8')).hexdigest()
+        hashed_password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
         user = User(
             username=form.username.data,
             fullname=form.fullname.data,
@@ -46,16 +57,30 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login.html", methods=['GET', 'POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+        user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
+        hashed_password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
+        if user and hashed_password == user.password:
+            login_user(user)
             flash('You have been logged in!', 'success')
-            return redirect(url_for('home'))
+            next = request.args.get('next')
+            return redirect(next or url_for('home'))
         else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
+            flash("Login Unsuccessful, Please check Username and Passowrd", "danger")
+
     return render_template('login.html', title='Login', form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect( url_for("home") )
 
 
 if __name__ == '__main__':

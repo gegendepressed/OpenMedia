@@ -7,6 +7,7 @@ from typing import List, Optional
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, func, select
 from sqlalchemy.orm import DeclarativeBase, column_property, Mapped, mapped_column, relationship
+from flask_login import UserMixin
 
 
 class Base(DeclarativeBase): # pylint: disable=too-few-public-methods
@@ -16,7 +17,7 @@ class Base(DeclarativeBase): # pylint: disable=too-few-public-methods
     pass
 
 
-class User(Base): # pylint: disable=too-few-public-methods
+class User(Base, UserMixin): # pylint: disable=too-few-public-methods
     """
     The User class whose object represents a user of app, user_account table
     """
@@ -37,6 +38,9 @@ class User(Base): # pylint: disable=too-few-public-methods
             f"\nName: {self.fullname}"
             f"\nProfile pic: {self.username}"
         )
+
+    def get_id(self):
+        return self.username
 
 
 class Likes(Base): # pylint: disable=too-few-public-methods
