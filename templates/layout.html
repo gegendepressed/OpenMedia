@@ -40,20 +40,23 @@
         </div>
     </nav>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
 
     <div class="container">
         <!-- This div adds 2 whitespace columns in all pages that use content block here -->
         <div class="row align-items-start">
             <div class="col-6 offset-1">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+
+                    {% endif %}
+                {% endwith %}
+
                 {% block content %}
                 {% endblock %}
             </div>
