@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from sqlalchemy import select
 from models import *
@@ -29,3 +29,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired()] )
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
+
+class PostForm(FlaskForm):
+    title = StringField('Add Post Title',validators=[DataRequired()])
+    content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])
+    submit = SubmitField("Submit")

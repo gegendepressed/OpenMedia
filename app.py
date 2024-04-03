@@ -1,9 +1,10 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm
+from form import RegistrationForm, LoginForm, PostForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import hashlib
+import time
 
 login_manager = LoginManager()
 app = Flask(__name__)
@@ -21,7 +22,7 @@ salt = "mysalt"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.execute(db.select(User).where(User.username == user_id)).scalar_one()
+    return db.session.execute(db.select(User).where(User.username == user_id)).scalar_one_or_none()
 
 @app.route("/")
 def home():
@@ -81,6 +82,20 @@ def login():
 def logout():
     logout_user()
     return redirect( url_for("home") )
+
+@app.route("/post/new", methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm() 
+    if form.validate_on_submit():
+        timestamp = int(time.time())
+        post = Posts(  title=form.title.data, text=form.content.data,owner=current_user,timestamp=timestamp)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post Created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('newpost.html', title='New Post', form=form, legend='New Post')
+
 
 
 if __name__ == '__main__':
