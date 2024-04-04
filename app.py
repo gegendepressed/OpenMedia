@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import hashlib
 import time
+from pytz import timezone
 
 
 login_manager = LoginManager()
@@ -28,7 +29,8 @@ def load_user(user_id):
 @app.route("/")
 def home():
     posts = db.session.scalars( select(Posts) ).all()
-    return render_template('home.html', posts=posts,datetime=datetime)
+    tz=timezone("Asia/Kolkata")
+    return render_template('home.html', posts=posts, datetime=datetime, tz=tz)
 
 
 @app.route("/about")
@@ -111,7 +113,7 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-    render_template ('post.html', post=post,datetime=datetime)
+    return render_template('post.html', post=post,datetime=datetime)
 
 
 
