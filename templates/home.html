@@ -14,7 +14,7 @@
               <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
               <small class="text-muted">{{ datetime.fromtimestamp(post.timestamp).strftime('%d/%m/%Y %H:%M') }}</small>
             </div>
-            <h2><a class="article-title text-decoration-none" href="#">{{ post.title }}</a></h2>
+            <h2><a class="article-title text-decoration-none" href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}<a></h2>
             <p class="article-content">{{ post.text }}</p>
           </div>
         </article>

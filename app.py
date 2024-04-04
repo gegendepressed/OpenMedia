@@ -28,8 +28,7 @@ def load_user(user_id):
 @app.route("/")
 def home():
     posts = db.session.scalars( select(Posts) ).all()
-
-    return render_template('home.html', posts=posts, datetime=datetime)
+    return render_template('home.html', posts=posts,datetime=datetime)
 
 
 @app.route("/about")
@@ -108,6 +107,11 @@ def new_post():
         flash('Post Created!', 'success')
         return redirect(url_for('home'))
     return render_template('newpost.html', title='New Post', form=form, legend='New Post')
+
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
+def post(post_id):
+    post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+    render_template ('post.html', post=post,datetime=datetime)
 
 
 
