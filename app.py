@@ -113,6 +113,7 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+
     comment = db.session.execute(db.select(Comments).where(id == post_id)).scalars()
     if current_user.is_authenticated:
         form = CommentForm() 
@@ -133,6 +134,7 @@ def post(post_id):
         return render_template('post.html', post=post,datetime=datetime,comment=post.comments,form=form)
     else:
         return render_template('post.html', post=post,datetime=datetime,comment=post.comments,form=None)
+
 
 
 
