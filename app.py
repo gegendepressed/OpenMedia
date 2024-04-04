@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm, PostForm
+from form import RegistrationForm, LoginForm, PostForm, CommentForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -113,7 +113,27 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-    return render_template('post.html', post=post,datetime=datetime)
+    comment = db.session.execute(db.select(Comments).where(id == post_id)).scalars()
+    if current_user.is_authenticated:
+        form = CommentForm() 
+        if form.validate_on_submit() :
+            comment = Comments( 
+                        text=form.text.data,
+                        created_by=current_user,
+                        post_id = post_id,
+                        )
+            db.session.add(comment)
+            post.comments.append(comment)
+            comment.created_by = current_user
+            db.session.commit()
+            for comment in post.comments:
+                print(comment)
+            flash('Comment Created!', 'success')
+            return redirect(url_for('home'))
+        return render_template('post.html', post=post,datetime=datetime,comment=post.comments,form=form)
+    else:
+        return render_template('post.html', post=post,datetime=datetime,comment=post.comments,form=None)
+
 
 
 

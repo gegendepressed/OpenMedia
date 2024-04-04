@@ -34,3 +34,7 @@ class PostForm(FlaskForm):
     title = StringField('Add Post Title',validators=[DataRequired()])
     content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+class CommentForm(FlaskForm):
+    text = TextAreaField("Comment here!",validators=[DataRequired()])
+    submit = SubmitField("Submit")

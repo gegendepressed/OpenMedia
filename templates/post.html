@@ -8,6 +8,41 @@
         </div>
             <h2 class="article-title">{{ post.title }}</h2>
             <p class="article-content">{{ post.text }}</p>
+        <div class="media-body">
+                 <h4>Comments</h4>
+            {% for comment in comments %}
+                <div class="text-muted">
+                    <p class="article-content" >test {{ comment.text }}</p>
+                </div>
+            {% endfor %}
         </div>
+    </div>
+
+    {% if form %}
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+            <legend class="border-bottom mb-4"> Post Comment </legend>
+                <div class="form-group">
+                    {{ form.text.label(class="form-control-label") }}
+
+                    {% if form.text.errors %}
+                        {{ form.content(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.text.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.text(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary btn-lg btn-block mt-4") }}
+                </div>
+            </fieldset>
+    {% endif %}
 </article>
+<br>
 {% endblock %}
