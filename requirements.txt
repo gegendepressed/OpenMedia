@@ -5,3 +5,4 @@ flask-login
 wtforms
 SQLAlchemy
 email-validator
+pytz

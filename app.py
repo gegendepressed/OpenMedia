@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import hashlib
 import time
+from pytz import timezone
 
 
 login_manager = LoginManager()
@@ -28,8 +29,8 @@ def load_user(user_id):
 @app.route("/")
 def home():
     posts = db.session.scalars( select(Posts) ).all()
-
-    return render_template('home.html', posts=posts, datetime=datetime)
+    tz=timezone("Asia/Kolkata")
+    return render_template('home.html', posts=posts, datetime=datetime, tz=tz)
 
 
 @app.route("/about")
