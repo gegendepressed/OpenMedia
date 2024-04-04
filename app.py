@@ -113,7 +113,8 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-    return render_template('post.html', post=post,datetime=datetime)
+    tz = timezone("Asia/Kolkata")
+    return render_template('post.html', post=post, datetime=datetime, tz=tz)
 
 
 
