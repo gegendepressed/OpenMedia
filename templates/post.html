@@ -12,20 +12,21 @@
 </article>
 
     {% if form %}
-    <div class="border-bottom mt-4 border border-primary content-section">
+    <div class="accordion"  id="commentFormParent">
         <form method="POST" action="">
             {{ form.csrf_token }}
             <fieldset class="form-group">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" body-info>
-                            <h4>Write down your thoughts!</h4>
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseCommentSection" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Write down your thoughts!
                         </button>
                     </h2>
 
 
-                    <div id="flush-collapseOne" class="accordion-collapse collapsed" aria-labelledby="flush-headingOne" data-bs-parent="#accordion-Example">
+                    <div id="flush-collapseCommentSection" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#commentFormParent">
                         <div class="accordion-body">
+                            Enter a comment:
                             {{ form.text.label(class="form-control-label") }}
 
                             {% if form.text.errors %}
