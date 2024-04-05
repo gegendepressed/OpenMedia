@@ -8,15 +8,8 @@
         </div>
             <h2 class="article-title">{{ post.title }}</h2>
             <p class="article-content">{{ post.text }}</p>
-        <div class="media-body">
-                 <h4>Comments</h4>
-            {% for comment in comments %}
-                <div class="text-muted">
-                    <p class="article-content" >test {{ comment.text }}</p>
-                </div>
-            {% endfor %}
-        </div>
     </div>
+</article>
 
     {% if form %}
         <form method="POST" action="">
@@ -42,7 +35,19 @@
                     {{ form.submit(class="btn btn-primary btn-lg btn-block mt-4") }}
                 </div>
             </fieldset>
+        </form>
     {% endif %}
-</article>
+
+        <div class="media-body">
+        <h4 class="border-bottom mt-4">Comments</h4>
+        {% for comment in comments %}
+            <div class="media content-section">
+                <div class="media-body">
+                    <a class="text-decoration-none" href="#"> {{ comment.created_by.fullname }}</a>
+                    <h3>{{ comment.text }}</h3>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 <br>
 {% endblock %}
