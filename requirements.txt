@@ -6,3 +6,4 @@ wtforms
 SQLAlchemy
 email-validator
 pytz
+supabase
