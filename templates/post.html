@@ -11,6 +11,17 @@
     </div>
 </article>
 
+    <div class="mt-2 mb-4 ms-4">
+        <div class="button" onclick="location.href='{{ url_for('like_post', post_id=post.id) }}';">
+            {% if has_liked %}
+                <img src="{{ url_for('static', filename='liked.svg') }}" class="me-2 likeButton">
+            {% else %}
+                <img src="{{ url_for('static', filename='notliked.svg') }}" class="me-2 likeButton">
+            {% endif %}
+            Likes: {{ post.no_of_likes }}
+        </div>
+    </div>
+
     {% if form %}
     <div class="accordion"  id="commentFormParent">
         <form method="POST" action="">

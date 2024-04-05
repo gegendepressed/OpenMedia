@@ -53,3 +53,11 @@ a.article-title:hover {
   height: 25px;
   vertical-align: middle;
 }
+
+.likeButton:hover {
+            transform: scale(1.2);
+}
+
+.likeButton:active {
+            transform: scale(1.6);
+        }
