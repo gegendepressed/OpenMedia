@@ -26,6 +26,11 @@ salt = "mysalt"
 def load_user(user_id):
     return db.session.execute(db.select(User).where(User.username == user_id)).scalar_one_or_none()
 
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for('login'))
+
 @app.route("/")
 def home():
     posts = db.session.scalars( select(Posts) ).all()
@@ -148,8 +153,7 @@ def like_post(post_id):
                                     .where(Likes.liked_by_id == current_user.username)
                                     .where(Likes.liked_post_id == post_id )
                                 ).scalar_one_or_none()
-    print(has_liked)
-
+    
     if not has_liked:
         like_object = Likes(
             liked_post_id=post_id,
