@@ -33,9 +33,12 @@ def unauthorized():
 
 @app.route("/")
 def home():
-    posts = db.session.scalars( select(Posts) ).all()
+    page = request.args.get('page', 1, type=int)
+    query = db.select(Posts).order_by(Posts.timestamp.desc())
+    posts = db.paginate(query, page = page, per_page=1)
     tz=timezone("Asia/Kolkata")
-    return render_template('home.html', posts=posts, datetime=datetime, tz=tz)
+    return render_template('home.html', title='Home', page=page,
+                           posts=posts,datetime=datetime,tz=tz)
 
 
 @app.route("/about")
