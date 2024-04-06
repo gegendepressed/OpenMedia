@@ -35,7 +35,7 @@ def unauthorized():
 def home():
     page = request.args.get('page', 1, type=int)
     query = db.select(Posts).order_by(Posts.timestamp.desc())
-    posts = db.paginate(query, page = page, per_page=1)
+    posts = db.paginate(query, page = page, per_page=10)
     tz=timezone("Asia/Kolkata")
     return render_template('home.html', title='Home', page=page,
                            posts=posts,datetime=datetime,tz=tz)
