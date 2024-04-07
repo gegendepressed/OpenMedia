@@ -147,6 +147,20 @@ def post(post_id):
     else:
         return render_template('post.html', post=post,datetime=datetime,comments=post.comments,form=None,tz=tz)
 
+@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+        post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+        form= PostForm()
+        if post.owner != current_user:
+               return redirect(url_for('post', post_id=post.id))
+        if form.validate_on_submit():
+                post.title = form.title.data
+                post.text = form.content.data 
+                db.session.commit()
+                flash('Post has been updated!', 'success')
+                return redirect(url_for('home'))
+        return render_template('newpost.html', title='Update Post', form=form, legend='Update Post')
 
 @app.route("/post/<int:post_id>/like", methods=['GET', 'POST'])
 @login_required
