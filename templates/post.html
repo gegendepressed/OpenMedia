@@ -1,15 +1,9 @@
 {% extends "layout.html" %}
+{% import "macros.html" as macro %}
+
 {% block content %}
 <article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
-              <small class="text-muted">{{ datetime.fromtimestamp(post.timestamp, tz=tz).strftime('%d/%m/%Y %I:%M %p') }}</small>
-        </div>
-            <h2 class="article-title">{{ post.title }}</h2>
-            <p class="article-content">{{ post.text }}</p>
-    </div>
-
+    {{ macro.render_post(post, datetime, tz) }}
 </article>
 <li class="button-container d-flex justify-content-between">
     <div class="mt-2 mb-4">
