@@ -61,3 +61,10 @@ a.article-title:hover {
 .likeButton:active {
             transform: scale(1.6);
         }
+
+.updateButton:hover {
+          transform: scale(1.2);
+          background-image: url(edit-hover.svg);
+         
+}
+
