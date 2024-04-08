@@ -148,12 +148,11 @@ def post(post_id):
 @login_required
 def update_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-        form = PostForm()
-        form.title.data = post.title
-        form.content.data = post.text
+        form = PostForm(title=post.title, content=post.text)
         if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         if form.validate_on_submit():
+                print(form.title.data)
                 post.title = form.title.data
                 post.text = form.content.data 
                 db.session.commit()
