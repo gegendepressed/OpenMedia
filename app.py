@@ -127,7 +127,7 @@ def post(post_id):
                                        .where(Likes.liked_by_id == current_user.username)
                                        .where(Likes.liked_post_id == post_id)
                                        ).scalar_one_or_none()
-        form = CommentForm()
+        form = CommentForm(text="")
         if form.validate_on_submit() :
             comment = Comments( 
                         text=form.text.data,
