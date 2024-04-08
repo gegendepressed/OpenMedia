@@ -8,4 +8,43 @@
                 <h5 class="account-heading"><strong>Username : </strong> {{ current_user.username }}</h5>
                 <h5 class="secondary text-muted"><strong> Email: </strong><span class="text-primary">{{ current_user.email }}</span></h5>
     </div>
+    <form method="POST" action="">
+        {{ form.csrf_token }}
+    <div class="content-section">
+        <legend class="border-bottom mb-4"> Edit Profile </legend>
+            <div class="form-group">
+                {{ form.username.label(class="form-control-label") }}
+    
+                {% if form.username.errors %}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+    
+            <div class="form-group">
+                {{ form.fullname.label(class="form-control-label") }}
+    
+                {% if form.fullname.errors %}
+                    {{ form.fullname(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.fullname.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.fullname(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            </div>
+    </div>
+</form>
 {% endblock %}

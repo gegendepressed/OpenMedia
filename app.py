@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm, PostForm, CommentForm
+from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -93,11 +93,19 @@ def logout():
     logout_user()
     return redirect( url_for("home") )
 
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     image_file = url_for('static', filename = current_user.profile_pic_url)
-    return render_template('account.html', title='Your Account', profile_pic_url= image_file)
+    user=current_user
+    form = EditProfileForm()
+    if form.validate_on_submit():
+                user.username = form.username.data
+                user.fullname = form.fullname.data 
+                db.session.commit()
+                flash('Post has been updated!', 'success')
+                return redirect(url_for('home'))
+    return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -127,7 +135,7 @@ def post(post_id):
                                        .where(Likes.liked_by_id == current_user.username)
                                        .where(Likes.liked_post_id == post_id)
                                        ).scalar_one_or_none()
-        form = CommentForm(text="")
+        form = CommentForm()
         if form.validate_on_submit() :
             comment = Comments( 
                         text=form.text.data,
@@ -148,11 +156,12 @@ def post(post_id):
 @login_required
 def update_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-        form = PostForm(title=post.title, content=post.text)
+        form = PostForm()
+        form.title.data = post.title
+        form.content.data = post.text
         if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         if form.validate_on_submit():
-                print(form.title.data)
                 post.title = form.title.data
                 post.text = form.content.data 
                 db.session.commit()

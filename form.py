@@ -38,3 +38,8 @@ class PostForm(FlaskForm):
 class CommentForm(FlaskForm):
     text = TextAreaField("",validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    fullname = StringField('Full Name', validators=[Length(min=0, max=140)])
+    submit = SubmitField('Submit')
