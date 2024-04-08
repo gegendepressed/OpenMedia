@@ -1,15 +1,63 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>About Us </h1>
-<div class="border-top pt-3">
+<section >
+  <div class="container py-5">
 
-	<h2>Yash Patil</h2>
-	<p>Designed Schema Design,Database connection,Backend,deployment,Security. </p>
 
-	<h2>Sairaj Pai</h2>
-	<p>Frontend,Backend,form and input validation,quality assurance.</p>
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">Sairaj Pai</h5>
+            <p class="text-muted mb-1">KC College Student</p>
+            <p class="text-muted mb-4">Thane</p>
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
 
-	<h2>Nandini Nichite</h2>
-	<p>Documentation,frontend,security.</p>
-</div>
+        <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">Yash Patil</h5>
+            <p class="text-muted mb-1">KC College Student</p>
+            <p class="text-muted mb-4">Thane</p>
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+
+          <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src={{url_for('static',filename='nandini.jpg')}} alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">Nandini Nichite</h5>
+            <p class="text-muted mb-1">KC College Student</p>
+            <p class="text-muted mb-4">Thane</p>
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Follow</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+    </div>
+</section>
 {% endblock %}
