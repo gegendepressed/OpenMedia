@@ -127,7 +127,7 @@ def post(post_id):
                                        .where(Likes.liked_by_id == current_user.username)
                                        .where(Likes.liked_post_id == post_id)
                                        ).scalar_one_or_none()
-        form = CommentForm() 
+        form = CommentForm()
         if form.validate_on_submit() :
             comment = Comments( 
                         text=form.text.data,
@@ -148,7 +148,9 @@ def post(post_id):
 @login_required
 def update_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-        form= PostForm()
+        form = PostForm()
+        form.title.data = post.title
+        form.content.data = post.text
         if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         if form.validate_on_submit():
