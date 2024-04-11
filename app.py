@@ -103,7 +103,7 @@ def account():
                 user.username = form.username.data
                 user.fullname = form.fullname.data 
                 db.session.commit()
-                flash('Post has been updated!', 'success')
+                flash('Profile has been updated!', 'success')
                 return redirect(url_for('home'))
     return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
 
