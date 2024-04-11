@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms import validators
 from sqlalchemy import select
 from models import *
 
@@ -40,6 +41,19 @@ class CommentForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class EditProfileForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[])
     fullname = StringField('Full Name', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
+    email = EmailField('Email Address', validators=[validators.Optional(),Email()])
+    password = PasswordField('New Password', validators=[])
+    confirm_password = PasswordField("Repeat the Password", validators=[EqualTo('password')])
+
+    def validate_username(self, username):
+        result = db.session.execute(select(User.username).where(User.username == username.data)).all()
+        if result:
+            raise ValidationError(f"The username {username.data} is taken, please choose a different one")
+
+    def validate_email(self, email):
+        result = db.session.execute(select(User.username).where(User.email == email.data)).all()
+        if result:
+            raise ValidationError(f"The email {email.data} is already used, please choose a different one")
