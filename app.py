@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm
+from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm, RequestResetForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -87,6 +87,18 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
+        #send_reset_email(user)
+        flash('If the user exists, an email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', legend='Reset Password', form=form)
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -100,10 +112,17 @@ def account():
     user=current_user
     form = EditProfileForm()
     if form.validate_on_submit():
-                user.username = form.username.data
-                user.fullname = form.fullname.data 
+                user.username = form.username.data if form.username.data else user.username
+                user.fullname = form.fullname.data if form.fullname.data else user.fullname
+                user.email = form.email.data if form.email.data else user.email
+                if form.password.data:
+                    user.password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
                 db.session.commit()
-                flash('Profile has been updated!', 'success')
+                if form.username.data:
+                    flash("Profile has been updated! Re-login might be required", "success")
+                else:
+                    flash('Profile has been updated!', 'success')
+
                 return redirect(url_for('home'))
     return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
 
