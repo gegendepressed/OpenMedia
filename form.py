@@ -31,6 +31,10 @@ class LoginForm(FlaskForm):
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
+class RequestResetForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 class PostForm(FlaskForm):
     title = StringField('Add Post Title',validators=[DataRequired()])
     content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])

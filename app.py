@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm
+from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm, RequestResetForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -86,6 +86,18 @@ def login():
 
     return render_template('login.html', title='Login', form=form)
 
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
+        #send_reset_email(user)
+        flash('If the user exists, an email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', legend='Reset Password', form=form)
 
 @app.route("/logout")
 @login_required
