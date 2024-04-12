@@ -9,7 +9,7 @@
                 {{ form.username.label(class="form-control-label") }}
 
                 {% if form.username.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                    {{ form.email(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.email.errors %}
                             <span>{{ error }}</span>
@@ -33,13 +33,17 @@
                 {% else %}
                     {{ form.password(class="form-control form-control-lg") }}
                 {% endif %}
-
-                {{ form.submit(class="btn btn-primary btn-lg btn-block mt-4") }}
-
             </div>
+            <br>
+                <div class="form-group">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember-me">Remember Me</label>
+                </div>
+                {{ form.submit(class="btn btn-primary btn-lg btn-block mt-4") }}
         </fieldset>
 <br>
         
+
         <div class="border-top pt-3">
             <small class="text-muted">
                 Create a New Account ? <a class="ml-2" href="{{ url_for('register') }}">Sign Up</a>
