@@ -102,13 +102,12 @@ def login():
         user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
         hashed_password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
         if user and hashed_password == user.password:
-            login_user(user)
+            login_user(user, remember=form.remember.data)
             flash('You have been logged in!', 'success')
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         else:
-            flash("Login Unsuccessful, Please check Username and Passowrd", "danger")
-
+            flash("Login Unsuccessful, Please check Username and Password", "danger")
     return render_template('login.html', title='Login', form=form)
 
 
@@ -175,6 +174,7 @@ def account():
                     flash("Profile has been updated! Re-login might be required", "success")
                 else:
                     flash('Profile has been updated!', 'success')
+
                 return redirect(url_for('home'))
     return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
 
