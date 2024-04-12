@@ -7,3 +7,4 @@ SQLAlchemy
 email-validator
 pytz
 supabase
+Flask-Mail

@@ -1,25 +1,50 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm, RequestResetForm
+from form import RegistrationForm, LoginForm, PostForm, CommentForm, EditProfileForm, RequestResetForm, ResetPasswordForm
 from models import *
 from datetime import datetime
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
+from flask_mail import Mail, Message
 import hashlib
 import time
 from pytz import timezone
+from itsdangerous.url_safe import URLSafeTimedSerializer
+from itsdangerous.exc import SignatureExpired
+import os
 
 
 login_manager = LoginManager()
+mail = Mail()
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
+app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
+app.config["MAIL_USE_SSL"] = True
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
+
 db.init_app(app)
 login_manager.init_app(app)
+mail.init_app(app)
+
 with app.app_context():
     db.create_all()
 
 salt = "mysalt"
+itsd_secret_key = "SECRET-KEY"
+itsd_salt = "MY-SALT"
+reset_pass_serializer = URLSafeTimedSerializer(itsd_secret_key, salt=itsd_salt)
 
+
+def send_reset_mail(recipient_email, signature):
+    msg = Message("Openmedia: Reset Password")
+    msg.body = (f"Use this URL to reset your password: {url_for("reset_password", token=signature, _external=True)} \n"
+                f"Only Valid for 15 minutes.\n\n"
+                f"Ignore if not requested")
+    msg.add_recipient(recipient_email)
+    mail.send(msg)
 
 
 @login_manager.user_loader
@@ -94,10 +119,38 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
-        #send_reset_email(user)
+        if user:
+            token = reset_pass_serializer.dumps({"username": user.username})
+            send_reset_mail(user.email, token)
         flash('If the user exists, an email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('login'))
     return render_template('reset_request.html', legend='Reset Password', form=form)
+
+@app.route("/reset_password/<string:token>", methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    try:
+        user_dict = reset_pass_serializer.loads(token, max_age=900)
+    except SignatureExpired:
+        flash("Reset Token expired, please regenerate.", "danger")
+        return redirect(url_for("reset_request"))
+    except:
+        flash("Invalid Password Reset Token.", "danger")
+        return redirect(url_for("reset_request"))
+
+    username = user_dict["username"]
+    form = ResetPasswordForm()
+
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).where(User.username == username)).scalar_one_or_none()
+        user.password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
+        db.session.commit()
+        flash("Password Reset Successfully!", "success")
+        return redirect(url_for("home"))
+    return render_template('reset_password.html', legend='Enter new password: ', form=form)
+
 
 @app.route("/logout")
 @login_required

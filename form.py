@@ -35,6 +35,11 @@ class RequestResetForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField("Repeat the Password", validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField("Reset")
+
 class PostForm(FlaskForm):
     title = StringField('Add Post Title',validators=[DataRequired()])
     content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])
