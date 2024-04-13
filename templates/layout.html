@@ -53,16 +53,18 @@
 
                 <li class='nav-item dropdown bg-dark'>
                     <button aria-expanded='false' class='btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center' data-bs-toggle='dropdown' type='button'>
-                        <img class="invert" src="{{ url_for('static', filename='sun.svg') }}"> </img>
+                        <img id = "theme-icon" class="invert" src="{{ url_for('static', filename='sun.svg') }}"><i class="bi bi-sun-fill"></i> </img>
                     </button>
                     <ul class='dropdown-menu dropdown-menu-end'>
                         <li>
                             <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('light')"  type='button'>
-                                 Light
+                                <img class="invert" src="{{ url_for('static', filename='sun.svg') }}" style="padding-right: 10px;"><i class="bi bi-sun-fill"></i> </img>
+                                Light
                             </button>
                         </li>
                         <li>
                             <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('dark')"type='button'>
+                                <img class="invert" src="{{ url_for('static', filename='moon.svg') }}" style="padding-right: 11px;"><i class="bi bi-sun-fill"></i> </img>
                                 Dark
                             </button>
                         </li>
@@ -125,20 +127,27 @@
         </div>
     </div>
     <script>
-        // Function to update the theme
         function updateTheme(theme) {
-            document.documentElement.setAttribute("data-bs-theme", theme);
-            // Store the selected theme in local storage
-            localStorage.setItem("theme", theme);
+          const colorMode = theme === "dark" ? "dark" : "light";
+          document.querySelector("html").setAttribute("data-bs-theme", colorMode);
+
+          // Change the image source based on the theme
+          const image = document.getElementById("theme-icon");
+          if (colorMode === "dark") {
+            image.src = "{{ url_for('static', filename='moon.svg') }}";
+          } else {
+            image.src = "{{ url_for('static', filename='sun.svg') }}";
+          }
         }
-    
-        // Check if a theme is already set in local storage
-        const storedTheme = localStorage.getItem("theme");
-    
-        // If a theme is set, update the theme to the stored one
-        if (storedTheme) {
-            updateTheme(storedTheme);
-        }
+
+        // Update theme when the preferred scheme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const colorMode = e.matches ? "dark" : "light";
+          updateTheme(colorMode);
+        });
+
+        // Initial call to set theme based on user's preference
+        updateTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     </script>
     
     
