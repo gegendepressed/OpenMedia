@@ -15,7 +15,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-2">
-         <img src="{{ url_for('static', filename='icon.png') }}" width="30" height="30" class="d-inline-block align-top me-2 ms-2 invertOnDark" alt="App Icon">
+         <img src="{{ url_for('static', filename='icon.png') }}" width="30" height="30" class="d-inline-block align-top me-2 ms-2 invert" alt="App Icon">
         <a class="navbar-brand mx-auto" href="#"> Social Media App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,23 +31,6 @@
 
             </ul>
             <ul class="navbar-nav ms-auto">
-                <li class='nav-item dropdown bg-dark'>
-                    <button aria-expanded='false' class='btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center' data-bs-toggle='dropdown' type='button'>
-                        <img class="invertOnDark" src="{{ url_for('static', filename='sun.svg') }}"> </img>
-                    </button>
-                    <ul class='dropdown-menu dropdown-menu-end'>
-                        <li>
-                            <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('light')"  type='button'>
-                                 Light
-                            </button>
-                        </li>
-                        <li>
-                            <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('dark')"type='button'> 
-                                Dark
-                            </button>
-                        </li>
-                    </ul>
-                </li>
 
                 {% if not current_user.is_authenticated %}
                     <li class="nav-item">
@@ -67,6 +50,25 @@
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>   
                 {% endif %}
+
+                <li class='nav-item dropdown bg-dark'>
+                    <button aria-expanded='false' class='btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center' data-bs-toggle='dropdown' type='button'>
+                        <img class="invert" src="{{ url_for('static', filename='sun.svg') }}"> </img>
+                    </button>
+                    <ul class='dropdown-menu dropdown-menu-end'>
+                        <li>
+                            <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('light')"  type='button'>
+                                 Light
+                            </button>
+                        </li>
+                        <li>
+                            <button class='dropdown-item d-flex align-items-center' onclick="updateTheme('dark')"type='button'>
+                                Dark
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </nav>
