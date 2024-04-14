@@ -10,7 +10,7 @@
     {% endif %}
 
     {% for post in posts %}
-        <article class="media content-section">
+        <article class="media content-section card">
             {{ macro.render_post(post, datetime, tz) }}
         </article>
     {% endfor %}
