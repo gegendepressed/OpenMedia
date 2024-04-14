@@ -7,7 +7,8 @@ from os import environ
 cloudinary.config( 
   cloud_name = environ.get("CLOUDINARY_NAME"), 
   api_key = environ.get("CLOUDINARY_KEY"), 
-  api_secret = environ.get("CLOUDINARY_SECRET") 
+  api_secret = environ.get("CLOUDINARY_SECRET"),
+  secure=True
 )
 
 
