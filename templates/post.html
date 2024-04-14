@@ -29,7 +29,7 @@
 
     {% if form %}
     <div class="accordion"  id="commentFormParent">
-        <form method="POST" action="">
+        <form method="POST" action="" autocomplete="off">
             {{ form.csrf_token }}
             <fieldset class="form-group">
                 <div class="accordion-item">
@@ -46,7 +46,7 @@
                             {{ form.text.label(class="form-control-label") }}
 
                             {% if form.text.errors %}
-                                {{ form.content(class="form-control form-control-lg is-invalid") }}
+                                {{ form.text(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.text.errors %}
                                         <span>{{ error }}</span>

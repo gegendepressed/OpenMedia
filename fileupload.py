@@ -1,36 +1,25 @@
-import os
-from supabase import create_client, Client, StorageException
-from mimetypes import guess_type
+import cloudinary
+from cloudinary import CloudinaryImage
+import cloudinary.uploader
+import cloudinary.api
+from os import environ
 
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+cloudinary.config( 
+  cloud_name = environ.get("CLOUDINARY_NAME"), 
+  api_key = environ.get("CLOUDINARY_KEY"), 
+  api_secret = environ.get("CLOUDINARY_SECRET") 
+)
 
-# Endpoint: https://lhebgmzvbaqyrvyxetaa.supabase.co/storage/v1/object/public/openmediabucket/Posts/example.jpg
-# Endpoint: https://lhebgmzvbaqyrvyxetaa.supabase.co/storage/v1/object/public/openmediabucket/Profiles/example.jpg
 
-def upload_post_image(file_object, filename):
-    path_on_supastorage="Posts/"+filename
-    
-    try:
-        supabase.storage.from_("openmediabucket").upload(file=file_object, path=path_on_supastorage,
-            file_options={"content-type": guess_type(filename)[0]})
-    except StorageException:
-        None
-        
-    return url+"/storage/v1/object/public/openmediabucket/"+path_on_supastorage
-    
-def upload_profile_image(file_object, filename):
-    path_on_supastorage="Profiles/"+filename
-    
-    try:
-        supabase.storage.from_("openmediabucket").upload(file=file_object, path=path_on_supastorage,
-            file_options={"content-type": guess_type(filename)[0]})
-    except StorageException:
-        None 
-        
-    return url+"/storage/v1/object/public/openmediabucket/"+path_on_supastorage
+def upload_image(file_object, filename):
+    cloudinary.uploader.upload(file_object,
+                               public_id=filename,
+                               unique_filename=False,
+                               overwrite=True)
+    src_url = CloudinaryImage(filename).build_url()
+    print(src_url)
+    return src_url
 
 if __name__=="__main__":
-    with open("test.jpg","rb") as f:
-        print(upload_profile_image(f, "frostimage.jpg"))
+    with open("/home/frost/Pictures/test.jpg","rb") as f:
+        print(upload_image(f, "yash_pfp"))

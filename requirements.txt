@@ -2,9 +2,10 @@ flask
 flask_wtf
 Flask-SQLAlchemy
 flask-login
+flask-uploads
 wtforms
 SQLAlchemy
 email-validator
 pytz
-supabase
+cloudinary
 Flask-Mail

@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from wtforms import validators
@@ -43,6 +44,10 @@ class ResetPasswordForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Add Post Title',validators=[DataRequired()])
     content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])
+    photo = FileField("image", validators=[validators.Optional(),
+                                        FileAllowed(['jpg', 'png'], 'Please choose jpg or png!'),
+                                        FileSize(max_size=2*1024*1024, message="File must be under 2MB")
+                                        ])
     submit = SubmitField("Submit")
 
 class CommentForm(FlaskForm):
