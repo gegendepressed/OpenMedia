@@ -214,6 +214,8 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+    comments_list = post.comments[::-1] if post.comments else []
+    print(comments_list)
     tz = timezone("Asia/Kolkata")
     if current_user.is_authenticated:
         has_liked = db.session.execute(select(Likes)
@@ -234,9 +236,9 @@ def post(post_id):
             flash('Comment Created!', 'success')
             return redirect(url_for("post", post_id=post_id))
 
-        return render_template('post.html', post=post,datetime=datetime,comments=post.comments,form=form,tz=tz, has_liked=has_liked)
+        return render_template('post.html', post=post,datetime=datetime,comments=comments_list,form=form,tz=tz, has_liked=has_liked)
     else:
-        return render_template('post.html', post=post,datetime=datetime,comments=post.comments,form=None,tz=tz)
+        return render_template('post.html', post=post,datetime=datetime,comments=comments_list,form=None,tz=tz)
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
