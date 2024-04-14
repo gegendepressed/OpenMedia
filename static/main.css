@@ -1,5 +1,5 @@
 .content-section {
-  background: #ffffff;
+  //background: #ffffff;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -11,7 +11,7 @@
 }
 
 .content-section {
-  background: #ffffff;
+  //background: #ffffff;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
@@ -68,3 +68,22 @@ a.article-title:hover {
          
 }
 
+.invert {
+        filter: invert(80%);
+}
+
+@media (prefers-color-scheme: dark) {
+        [data-bs-theme=dark] .article-title {
+                color: #C7C9CB
+         
+        }
+
+        [data-bs-theme=dark] .article-content {
+                color: #9BA4B5;
+        }
+
+        [data-bs-theme=dark] .invertOnDark { 
+            filter: invert(80%); 
+        } 
+
+}

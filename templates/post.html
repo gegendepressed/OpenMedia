@@ -2,16 +2,16 @@
 {% import "macros.html" as macro %}
 
 {% block content %}
-<article class="media content-section">
+<article class="media content-section card">
     {{ macro.render_post(post, datetime, tz) }}
 </article>
 <li class="button-container d-flex justify-content-between">
     <div class="mt-2 mb-4">
         <ul class="button" onclick="location.href='{{ url_for('like_post', post_id=post.id) }}';">
             {% if has_liked %}
-                <img src="{{ url_for('static', filename='liked.svg') }}" class="me-2 likeButton">
+                <img src="{{ url_for('static', filename='liked.svg') }}" class="me-2 likeButton invertOnDark">
             {% else %}
-                <img src="{{ url_for('static', filename='notliked.svg') }}" class="me-2 likeButton">
+                <img src="{{ url_for('static', filename='notliked.svg') }}" class="me-2 likeButton invertOnDark">
             {% endif %}
             Likes: {{ post.no_of_likes }}
         </ul>
@@ -20,7 +20,7 @@
     <div class="mt-2 mb-4 ms-4">
         {% if post.owner == current_user %}
         <ul class="button" onclick="location.href='{{ url_for('update_post', post_id=post.id) }}';">
-            <img src="{{ url_for('static', filename='edit.svg') }}" class="me-2 updateButton">
+            <img src="{{ url_for('static', filename='edit.svg') }}" class="me-2 updateButton invertOnDark">
         </ul>
         {% endif %}
     </div>

@@ -42,7 +42,7 @@ reset_pass_serializer = URLSafeTimedSerializer(itsd_secret_key, salt=itsd_salt)
 
 def send_reset_mail(recipient_email, signature):
     msg = Message("Openmedia: Reset Password")
-    msg.body = (f"Use this URL to reset your password: {url_for("reset_password", token=signature, _external=True)} \n"
+    msg.body = (f"Use this URL to reset your password: {url_for('reset_password', token=signature, _external=True)} \n"
                 f"Only Valid for 15 minutes.\n\n"
                 f"Ignore if not requested")
     msg.add_recipient(recipient_email)
