@@ -7,7 +7,7 @@
         <h2><a class="article-title text-decoration-none" href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a></h2>
         <p class="article-content">{{ post.text }}</p>
         {% if post.image %}
-            <img class="card-img-bottom" src="{{ post.image }}" alt="Card image cap">
+            <img class="card-img-bottom mb-2" src="{{ post.image }}" alt="Card image cap">
         {% endif %}
     </div>
 {%- endmacro %}
