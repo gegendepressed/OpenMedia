@@ -3,7 +3,7 @@
         <div class="article-metadata d-flex justify-content-between">
             <div>
                 {% if post.owner.profile_pic_url == "user.png" %}
-                    <img class="mb-1 me-1" src="{{ url_for('static', filename='user.png') }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
+                    <img class="mb-1 me-1 invertOnDark" src="{{ url_for('static', filename='user.png') }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
                 {% else %}
                 {% endif %}
                 <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
