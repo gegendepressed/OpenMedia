@@ -166,16 +166,12 @@ def account():
     user=current_user
     form = EditProfileForm()
     if form.validate_on_submit():
-                user.username = form.username.data if form.username.data else user.username
                 user.fullname = form.fullname.data if form.fullname.data else user.fullname
                 user.email = form.email.data if form.email.data else user.email
                 if form.password.data:
                     user.password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
                 db.session.commit()
-                if form.username.data:
-                    flash("Profile has been updated! Re-login might be required", "success")
-                else:
-                    flash('Profile has been updated!', 'success')
+                flash('Profile has been updated!', 'success')
 
                 return redirect(url_for('home'))
     return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
