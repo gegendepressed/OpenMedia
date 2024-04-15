@@ -45,7 +45,7 @@ class PostForm(FlaskForm):
     title = StringField('Add Post Title',validators=[DataRequired()])
     content = TextAreaField("Write down your thoughts !",validators=[DataRequired()])
     photo = FileField("image", validators=[validators.Optional(),
-                                        FileAllowed(['jpg', 'jpeg', 'png'], 'Please choose jpg or png!'),
+                                        FileAllowed(['jpg', 'gif', 'jpeg', 'png'], 'Please choose jpg, png or gif!'),
                                         FileSize(max_size=2*1024*1024, message="File must be under 2MB")
                                         ])
     submit = SubmitField("Submit")
