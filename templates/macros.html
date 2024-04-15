@@ -1,6 +1,6 @@
 {% macro render_post(post, datetime, tz) -%}
     <div class="media-body">
-        <div class="article-metadata d-flex justify-content-between">
+        <div class="article-metadata">
             <div>
                 {% if post.owner.profile_pic_url == "user.png" %}
                     <img class="mb-1 me-1 invertOnDark" src="{{ url_for('static', filename='user.png') }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
@@ -8,13 +8,16 @@
                 {% endif %}
                 <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
             </div>
-            <small class="text-muted my-auto pb-1">{{ datetime.fromtimestamp(post.timestamp, tz=tz).strftime('%d/%m/%Y %I:%M %p') }}</small>
         </div>
         <h2><a class="article-title text-decoration-none" href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a></h2>
         <p class="article-content">{{ post.text }}</p>
         {% if post.image %}
-            <img class="card-img-bottom mb-2" src="{{ post.image }}" alt="Card image cap">
+            <img class="card-img-bottom mb-3" src="{{ post.image }}" alt="Card image cap">
         {% endif %}
+
+        <div class="mb-1 d-flex flex-row-reverse">
+            <small class="text-muted pb-1 border p-1" style="border-radius: 10px;">{{ datetime.fromtimestamp(post.timestamp, tz=tz).strftime('%d/%m/%Y %I:%M %p') }}</small>
+        </div>
     </div>
 {%- endmacro %}
 
