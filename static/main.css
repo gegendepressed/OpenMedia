@@ -65,10 +65,14 @@ a.article-title:hover {
           background-image: url(edit-hover.svg);
          
 }
+
 .deleteButton:hover {
   transform: scale(1.2);
 }
 
+.invert {
+        filter: invert(80%);
+}
 
 @media (prefers-color-scheme: dark) {
         [data-bs-theme=dark] .article-title {
