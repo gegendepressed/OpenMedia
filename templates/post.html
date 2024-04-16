@@ -24,8 +24,32 @@
         </ul>
         {% endif %}
     </div>
-</li>
 
+    <div class="mt-2 mb-4 ms-4">
+        {% if post.owner == current_user %}
+        <button type="button" onclick="location.href='{{ url_for('delete_post', post_id=post.id) }}';" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <img src="{{ url_for('static', filename='delete.svg') }}" class="me-2 deleteButton invertOnDark">
+        </button>
+        {% endif %}
+    </div>
+</li>
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Delete the Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     {% if form %}
     <div class="accordion"  id="commentFormParent">

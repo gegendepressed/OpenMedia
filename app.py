@@ -260,6 +260,18 @@ def update_post(post_id):
                 return redirect(url_for('home'))
         return render_template('newpost.html', title='Update Post', form=form, legend='Update Post')
 
+@app.route("/post/<int:post_id>/delete", methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+        post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+        if post.owner != current_user:
+               return redirect(url_for('post', post_id=post.id))
+        else:
+            db.session.delete(post)
+            db.session.commit()
+            flash('Post has been Deleted !', 'success')
+            return redirect(url_for('home'))
+
 @app.route("/post/<int:post_id>/like", methods=['GET', 'POST'])
 @login_required
 def like_post(post_id):
