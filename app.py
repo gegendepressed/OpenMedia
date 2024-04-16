@@ -12,6 +12,7 @@ from itsdangerous.exc import SignatureExpired
 import os
 from fileupload import upload_image
 import secrets
+from sqlalchemy import delete
 
 
 login_manager = LoginManager()
@@ -267,6 +268,8 @@ def delete_post(post_id):
         if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         else:
+            db.session.execute( delete(Comments).where(Comments.post_id == post_id) )
+            db.session.execute( delete(Likes).where(Likes.liked_post_id == post_id) )
             db.session.delete(post)
             db.session.commit()
             flash('Post has been Deleted !', 'success')

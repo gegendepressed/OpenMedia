@@ -17,22 +17,18 @@
         </ul>
     </div>
     
-    <div class="mt-2 mb-4 ms-4">
+    <div class="mt-2 mb-4 ms-4 d-flex">
         {% if post.owner == current_user %}
         <ul class="button" onclick="location.href='{{ url_for('update_post', post_id=post.id) }}';">
             <img src="{{ url_for('static', filename='edit.svg') }}" class="me-2 updateButton invertOnDark">
         </ul>
-        {% endif %}
-    </div>
-
-    <div class="mt-2 mb-4 ms-4">
-        {% if post.owner == current_user %}
-        <button type="button" onclick="location.href='{{ url_for('delete_post', post_id=post.id) }}';" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+         <ul class="btn p-0" data-bs-toggle="modal" data-bs-target="#deleteModal">
             <img src="{{ url_for('static', filename='delete.svg') }}" class="me-2 deleteButton invertOnDark">
-        </button>
+        </ul>
         {% endif %}
     </div>
 </li>
+
 <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -41,11 +37,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          Are you sure?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Delete the Post</button>
+          <button type="button" class="btn btn-primary" onclick="location.href='{{ url_for('delete_post', post_id=post.id) }}';">Delete the Post</button>
         </div>
       </div>
     </div>

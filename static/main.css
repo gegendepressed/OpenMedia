@@ -1,5 +1,4 @@
 .content-section {
-  background: #ffffff;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -11,7 +10,6 @@
 }
 
 .content-section {
-  background: #ffffff;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
@@ -73,16 +71,16 @@ a.article-title:hover {
 
 
 @media (prefers-color-scheme: dark) {
-        [data-bs-theme=dark].article-title {
+        [data-bs-theme=dark] .article-title {
                 color: #C7C9CB
          
         }
 
-        .article-content {
+        [data-bs-theme=dark] .article-content {
                 color: #9BA4B5;
         }
 
-        .invertOnDark { 
+        [data-bs-theme=dark] .invertOnDark {
             filter: invert(80%); 
         } 
 
