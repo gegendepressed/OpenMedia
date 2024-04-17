@@ -40,7 +40,7 @@ salt = "mysalt"
 itsd_secret_key = "SECRET-KEY"
 itsd_salt = "MY-SALT"
 reset_pass_serializer = URLSafeTimedSerializer(itsd_secret_key, salt=itsd_salt)
-
+tz=timezone("Asia/Kolkata")
 
 def send_reset_mail(recipient_email, signature):
     msg = Message("Openmedia: Reset Password")
@@ -62,12 +62,32 @@ def unauthorized():
 
 @app.route("/")
 def home():
-    page = request.args.get('page', 1, type=int)
+    current_page = request.args.get('page', 1, type=int)
     query = db.select(Posts).order_by(Posts.timestamp.desc())
-    posts = db.paginate(query, page = page, per_page=10)
-    tz=timezone("Asia/Kolkata")
-    return render_template('home.html', title='Home', page=page,
-                           posts=posts,datetime=datetime,tz=tz)
+    posts = db.paginate(query, page = current_page, per_page=10)
+    page_list = posts.iter_pages(left_edge=1,right_edge=1, left_current=2, right_current=2)
+    return render_template('home.html', title='Home', current_page=current_page,
+                           posts=posts,datetime=datetime,tz=tz, page_list=page_list)
+
+@app.route("/profile/<string:username>")
+def profile(username):
+    user = db.session.execute( select(User).where(User.username == username ) ).scalar_one_or_none()
+    if not user:
+        flash("User not found.", "danger")
+        return redirect(url_for('home'))
+
+    current_page = request.args.get('page', 1, type=int)
+    query = db.select(Posts).where(Posts.owner_id == username).order_by(Posts.timestamp.desc())
+    posts = db.paginate(query, page=current_page, per_page=5)
+    page_list = posts.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2)
+    return render_template('profile.html',
+                               user=user,
+                               posts=posts,
+                               current_page=current_page,
+                               page_list=page_list,
+                               datetime=datetime,
+                               tz=tz
+                           )
 
 
 @app.route("/about")
@@ -230,7 +250,6 @@ def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
     comments_list = post.comments[::-1] if post.comments else []
     print(comments_list)
-    tz = timezone("Asia/Kolkata")
     if current_user.is_authenticated:
         has_liked = db.session.execute(select(Likes)
                                        .where(Likes.liked_by_id == current_user.username)

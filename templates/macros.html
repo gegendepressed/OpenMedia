@@ -7,7 +7,7 @@
                 {% else %}
                     <img class="mb-1 me-1 rounded-circle" src="{{ post.owner.profile_pic_url }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
                 {% endif %}
-                <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
+                <a class="text-decoration-none me-3" href="{{ url_for('profile', username=post.owner.username) }}">{{ post.owner.fullname }}</a>
             </div>
         </div>
         <h2><a class="article-title text-decoration-none" href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a></h2>
@@ -22,3 +22,24 @@
     </div>
 {%- endmacro %}
 
+{% macro render_pagination(current_page, page_list, endpoint, username=None) -%}
+    <div class="container mt-6">
+        <ul class="pagination justify-content-center">
+            {% for page in page_list %}
+                {% if page %}
+                    {% if page == current_page %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>
+                {% else %}
+                    {% if username %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=page, username=username) }}">{{ page }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+                    {% endif %}
+                {% endif %}
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{%- endmacro %}

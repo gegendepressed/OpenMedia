@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macro %}
+
+{% block content %}
+
+    <div class="content-section">
+            <legend class="border-bottom mb-4"> Account Information </legend>
+                <div class="text-center mb-4 mt-2">
+                    {% if user.profile_pic_url == "user.png" %}
+                        <img src="{{ url_for('static', filename='user.png') }}" class="invertOnDark" alt="{{ user.fullname }} profile picture." width="175px">
+                    {% else %}
+                        <img src="{{ user.profile_pic_url }}" class="rounded-circle" alt="{{ user.fullname }} profile picture." width="175px">
+                    {% endif %}
+                </div>
+
+                <h5 class="account-heading"><strong>Username : </strong> {{ user.username }}</h5>
+                <h5 class="account-heading"><strong>Fullname : </strong>  {{ user.fullname }}</h5>
+    </div>
+
+    <h3 class="pb-3">Posts: </h3>
+
+    {% for post in posts %}
+        <article class="media content-section card">
+            {{ macro.render_post(post, datetime, tz) }}
+        </article>
+    {% endfor %}
+
+    {{ macro.render_pagination(current_page, page_list, endpoint='profile', username=user.username) }}
+{% endblock %}
