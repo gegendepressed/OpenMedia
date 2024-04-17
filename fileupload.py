@@ -21,6 +21,10 @@ def upload_image(file_object, filename):
     print(src_url)
     return src_url
 
-if __name__=="__main__":
-    with open("/home/frost/Pictures/test.jpg","rb") as f:
-        print(upload_image(f, "yash_pfp"))
+
+def delete_image(filename):
+    cloudinary.uploader.destroy(filename)
+
+
+if __name__ == "__main__":
+    delete_image("yash_pfp")

@@ -10,7 +10,7 @@ from pytz import timezone
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import SignatureExpired
 import os
-from fileupload import upload_image
+from fileupload import upload_image, delete_image
 import secrets
 from sqlalchemy import delete
 
@@ -268,6 +268,9 @@ def delete_post(post_id):
         if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         else:
+            if post.image:
+                image_id = post.image.split("/")[-1]
+                delete_image(image_id)
             db.session.execute( delete(Comments).where(Comments.post_id == post_id) )
             db.session.execute( delete(Likes).where(Likes.liked_post_id == post_id) )
             db.session.delete(post)
