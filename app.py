@@ -13,7 +13,8 @@ import os
 from fileupload import upload_image, delete_image
 import secrets
 from sqlalchemy import delete
-
+from PIL import Image
+from io import BytesIO
 
 login_manager = LoginManager()
 mail = Mail()
@@ -167,14 +168,30 @@ def account():
     user=current_user
     form = EditProfileForm()
     if form.validate_on_submit():
-                user.fullname = form.fullname.data if form.fullname.data else user.fullname
-                user.email = form.email.data if form.email.data else user.email
-                if form.password.data:
-                    user.password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
-                db.session.commit()
-                flash('Profile has been updated!', 'success')
+        file = form.photo.data
+        if file:
+            randomhex = secrets.token_hex(10)
+            if user.profile_pic_url != "user.png":
+                image_id = user.profile_pic_url.split("/")[-1]
+            else:
+                image_id = upload_image(file, f"{current_user.username}_profile_{randomhex}")
+            with Image.open(file) as im:
+                size = 175, 175
+                im.thumbnail(size, resample=Image.LANCZOS)
+                final_image = BytesIO()
+                im.save(final_image, format='png')
+                final_image.seek(0)
+            image_url = upload_image(final_image, image_id)
+            user.profile_pic_url = image_url
 
-                return redirect(url_for('home'))
+        user.fullname = form.fullname.data if form.fullname.data else user.fullname
+        user.email = form.email.data if form.email.data else user.email
+        if form.password.data:
+            user.password = hashlib.sha256((form.password.data + salt).encode('utf-8')).hexdigest()
+        db.session.commit()
+        flash('Profile has been updated!', 'success')
+
+        return redirect(url_for('home'))
     return render_template('account.html', title='Your Account', form=form,user=user, profile_pic_url= image_file)
 
 

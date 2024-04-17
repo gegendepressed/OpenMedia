@@ -5,6 +5,7 @@
                 {% if post.owner.profile_pic_url == "user.png" %}
                     <img class="mb-1 me-1 invertOnDark" src="{{ url_for('static', filename='user.png') }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
                 {% else %}
+                    <img class="mb-1 me-1 rounded-circle" src="{{ post.owner.profile_pic_url }}" alt="{{ post.owner.fullname }} profile picture" width="35px">
                 {% endif %}
                 <a class="text-decoration-none me-3" href="#">{{ post.owner.fullname }}</a>
             </div>

@@ -60,6 +60,10 @@ class EditProfileForm(FlaskForm):
     email = EmailField('Email Address', validators=[validators.Optional(),Email()])
     password = PasswordField('New Password', validators=[])
     confirm_password = PasswordField("Repeat the Password", validators=[EqualTo('password')])
+    photo = FileField("Profile Picture", validators=[validators.Optional(),
+                                           FileAllowed(['jpg', 'jpeg', 'png'], 'Please choose jpg or png!'),
+                                           FileSize(max_size=2 * 1024 * 1024, message="File must be under 2MB")
+                                           ])
 
     def validate_email(self, email):
         result = db.session.execute(select(User.username).where(User.email == email.data)).all()

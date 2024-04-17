@@ -9,3 +9,4 @@ email-validator
 pytz
 cloudinary
 Flask-Mail
+Pillow
