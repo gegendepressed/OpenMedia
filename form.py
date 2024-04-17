@@ -19,6 +19,8 @@ class RegistrationForm(FlaskForm):
         result = db.session.execute(select(User.username).where(User.username == username.data)).all()
         if result:
             raise ValidationError(f"The username {username.data} is taken, please choose a different one")
+        if " " in username.data:
+            raise ValidationError("Username cannot contain spaces")
 
     def validate_email(self, email):
         result = db.session.execute(select(User.username).where(User.email == email.data)).all()
