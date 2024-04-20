@@ -5,7 +5,7 @@
 
 from typing import List, Optional
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, func, select
+from sqlalchemy import ForeignKey, func, select, String, Integer, BigInteger
 from sqlalchemy.orm import DeclarativeBase, column_property, Mapped, mapped_column, relationship
 from flask_login import UserMixin
 
@@ -23,11 +23,11 @@ class User(Base, UserMixin): # pylint: disable=too-few-public-methods
     """
     __tablename__ = "user_account"
 
-    username: Mapped[str] = mapped_column(primary_key=True)
-    fullname: Mapped[str] = mapped_column(nullable=False)
-    email: Mapped[str] = mapped_column(nullable=False, unique=True)
-    password: Mapped[str] = mapped_column(nullable=False)
-    profile_pic_url: Mapped[Optional[str]] = mapped_column(default="user.png")
+    username: Mapped[str] = mapped_column(String(30), primary_key=True)
+    fullname: Mapped[str] = mapped_column(String(50), nullable=False)
+    email: Mapped[str] = mapped_column(String(256), nullable=False, unique=True)
+    password: Mapped[str] = mapped_column(String(300), nullable=False)
+    profile_pic_url: Mapped[Optional[str]] = mapped_column(String(400), default="user.png")
     posts: Mapped[List["Posts"]] = relationship(back_populates="owner")
 
     def __str__(self) -> str:
@@ -70,11 +70,11 @@ class Posts(Base): # pylint: disable=too-few-public-methods
     __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(nullable=False)
-    text: Mapped[str] = mapped_column(nullable=False)
-    image: Mapped[Optional[str]] = mapped_column()
+    title: Mapped[str] = mapped_column(String(256), nullable=False)
+    text: Mapped[str] = mapped_column(String(1000), nullable=False)
+    image: Mapped[Optional[str]] = mapped_column(String(400))
     likes: Mapped[List["Likes"]] = relationship(back_populates="post")
-    timestamp: Mapped[int] = mapped_column(nullable=False)
+    timestamp: Mapped[int] = mapped_column(BigInteger, nullable=False)
     owner_id: Mapped[str] = mapped_column(ForeignKey("user_account.username"))
     owner: Mapped["User"] = relationship(back_populates="posts")
     comments: Mapped[List["Comments"]] = relationship(back_populates="post")
@@ -101,7 +101,7 @@ class Comments(Base): # pylint: disable=too-few-public-methods
     __tablename__ = "comments"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    text: Mapped[str] = mapped_column(nullable=False)
+    text: Mapped[str] = mapped_column(String(500), nullable=False)
     creator_id: Mapped[str] = mapped_column(ForeignKey("user_account.username"))
     created_by: Mapped["User"] = relationship()
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
