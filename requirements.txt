@@ -10,3 +10,6 @@ pytz
 cloudinary
 Flask-Mail
 Pillow
+gunicorn
+psycopg2
+psycopg2-binary
