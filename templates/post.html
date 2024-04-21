@@ -94,7 +94,7 @@
         {% for comment in comments %}
             <div class="media content-section">
                 <div class="media-body">
-                    <a class="text-decoration-none" href="#"> {{ comment.created_by.fullname }}</a>
+                    <a class="text-decoration-none" href="{{ url_for('profile', username=comment.created_by.username) }}"> {{ comment.created_by.fullname }}</a>
                     <h5>{{ comment.text }}</h5>
                 </div>
             </div>

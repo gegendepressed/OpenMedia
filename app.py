@@ -252,7 +252,6 @@ def new_post():
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
     comments_list = post.comments[::-1] if post.comments else []
-    print(comments_list)
     if current_user.is_authenticated:
         has_liked = db.session.execute(select(Likes)
                                        .where(Likes.liked_by_id == current_user.username)
