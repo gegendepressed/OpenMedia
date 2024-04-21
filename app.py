@@ -44,7 +44,6 @@ itsd_salt = "MY-SALT"
 itsd_salt = os.environ.get("ITSD_SALT") if os.environ.get("ITSD_SALT") else itsd_salt
 reset_pass_serializer = URLSafeTimedSerializer(itsd_secret_key, salt=itsd_salt)
 tz = timezone("Asia/Kolkata")
-print(salt, itsd_salt, itsd_secret_key)
 
 def send_reset_mail(recipient_email, signature):
     msg = Message("Openmedia: Reset Password")

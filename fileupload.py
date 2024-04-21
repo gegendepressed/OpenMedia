@@ -18,7 +18,6 @@ def upload_image(file_object, filename):
                                unique_filename=False,
                                overwrite=True)
     src_url = CloudinaryImage(filename).build_url()
-    print(src_url)
     return src_url
 
 
