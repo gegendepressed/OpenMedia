@@ -1,0 +1,37 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: Python-MiniProject
+    src: ./
+    engine: python3.9
+    primary: true
+    public: true
+    presets:
+      env:
+        - name: DB_URI
+          description: Database URI
+        - name: MAIL_SERVER
+          description: Mail Server URL
+        - name: MAIL_PORT
+          description: Mail Server Port
+        - name: MAIL_USERNAME
+          description: Mail Username
+        - name: MAIL_PASSWORD
+          description: Mail Password
+        - name: MAIL_DEFAULT_SENDER
+          description: Default Email Addr
+        - name: CLOUDINARY_NAME
+          description: Cloudinary app name
+        - name: CLOUDINARY_KEY
+          description: Cloudinary key
+        - name: CLOUDINARY_SECRET
+          description: Cloudinary secret
+        - name: FLASK_SECRET_KEY
+          description: Flask Secret Key
+        - name: FLASK_SALT
+          description: Flask Salt
+        - name: ITSD_SECRET_KEY
+          description: It's dangerous secret key
+        - name: ITSD_SALT
+          description: It's dangerous salt
+    run: gunicorn app:app

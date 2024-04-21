@@ -8,15 +8,15 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.png') }}">
     {% if title %}
-        <title> Social Media App- {{title}} </title>
+        <title> OpenMedia - {{title}} </title>
     {% else %}
-        <title> Social Media App</title>
+        <title> OpenMedia </title>
     {% endif %}
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-2">
-         <img src="{{ url_for('static', filename='icon.png') }}" width="30" height="30" class="d-inline-block align-top me-2 ms-2 invert" alt="App Icon">
-        <a class="navbar-brand mx-auto" href="#"> Social Media App</a>
+         <img src="{{ url_for('static', filename='icon.png') }}" width="30" height="30" class="d-inline-block align-top me-2 ms-2 invert" alt="App Icon" onclick="location.href='{{ url_for('home') }}';">
+        <a class="navbar-brand mx-auto" href="{{ url_for('home') }}"> OpenMedia </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -98,8 +98,9 @@
 
             <div class="col-md-3 offset-md-1 col-10 offset-1 p-4 mt-4 border border-primary content-section">
                 <div class="sidebar">
-                    <h3>Our Sidebar</h3>
-                    <p class='text-muted'>How is your day going?</p>
+                    <h3>Happenings</h3>
+                    <p class='text-muted'>Theory and practice sometimes clash. And when that happens, theory loses.
+Every single time. <br> ~ Linus Torvalds</p>
                     <div class="accordion accordion-flush" id="accordionFlushExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="flush-headingOne">
@@ -108,7 +109,7 @@
                                 </button>
                             </h2>
                             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body"> More Updates to Come!</div>
+                                <div class="accordion-body"> We are now live on Production!</div>
                             </div>
                         </div>
                         <div class="accordion-item">
@@ -118,7 +119,7 @@
                                 </button>
                             </h2>
                             <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body"> You can do Posts and Comments now !</div>
+                                <div class="accordion-body"> You can now add Profile Pics, Reset Passwords and Change Theme! </div>
                             </div>
                         </div>
                     </div>
