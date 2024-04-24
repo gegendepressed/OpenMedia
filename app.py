@@ -195,9 +195,10 @@ def account():
         if file:
             randomhex = secrets.token_hex(10)
             if user.profile_pic_url != "user.png":
-                image_id = user.profile_pic_url.split("/")[-1]
-            else:
-                image_id = upload_image(file, f"{current_user.username}_profile_{randomhex}")
+                current_image_id = user.profile_pic_url.split("/")[-1]
+                delete_image(current_image_id)
+
+            image_id = upload_image(file, f"{current_user.username}_profile_{randomhex}")
             with Image.open(file) as im:
                 size = 175, 175
                 im.thumbnail(size, resample=Image.LANCZOS)
@@ -289,7 +290,12 @@ def update_post(post_id):
                 if file:
                     if post.image:
                         image_id = post.image.split("/")[-1]
-                        upload_image(file, image_id)
+                        delete_image(image_id)
+
+                        randomhex = secrets.token_hex(10)
+                        image_url = upload_image(file, f"{current_user.username}_post_{randomhex}")
+
+                        post.image = image_url
                     else:
                         randomhex = secrets.token_hex(10)
                         image_url = upload_image(file, f"{current_user.username}_post_{randomhex}")
