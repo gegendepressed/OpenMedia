@@ -18,7 +18,7 @@
     </div>
     
     <div class="mt-2 mb-4 ms-4 d-flex">
-        {% if post.owner == current_user or current_user.is_moderator() %}
+        {% if post.owner == current_user %}
         <ul class="button" onclick="location.href='{{ url_for('update_post', post_id=post.id) }}';">
             <img src="{{ url_for('static', filename='edit.svg') }}" class="me-2 updateButton invertOnDark">
         </ul>

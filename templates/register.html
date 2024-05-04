@@ -25,9 +25,9 @@
                 {{ form.fullname.label(class="form-control-label") }}
 
                 {% if form.fullname.errors %}
-                    {{ form.fullname(class="form-control form-control-lg is-invalid") }}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.fullname.errors %}
+                        {% for error in form.username.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>

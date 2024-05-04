@@ -281,8 +281,8 @@ def post(post_id):
 def update_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
         form = PostForm(title=post.title, content=post.text)
-        if post.owner != current_user and not current_user.is_moderator():
-            return redirect(url_for('post', post_id=post.id))
+        if post.owner != current_user:
+               return redirect(url_for('post', post_id=post.id))
         if form.validate_on_submit():
                 post.title = form.title.data
                 post.text = form.content.data
@@ -309,7 +309,7 @@ def update_post(post_id):
 @login_required
 def delete_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-        if post.owner != current_user and not current_user.is_moderator():
+        if post.owner != current_user:
                return redirect(url_for('post', post_id=post.id))
         else:
             if post.image:
