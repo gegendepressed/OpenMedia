@@ -27,6 +27,9 @@ class RegistrationForm(FlaskForm):
         if result:
             raise ValidationError(f"The email {email.data} is already used, please choose a different one")
 
+    def validate_fullname(self, fullname):
+        if "<Mod>" in fullname.data:
+            raise ValidationError("You cannot put <Mod> in your fullname.")
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -71,3 +74,7 @@ class EditProfileForm(FlaskForm):
         result = db.session.execute(select(User.username).where(User.email == email.data)).all()
         if result:
             raise ValidationError(f"The email {email.data} is already used, please choose a different one")
+
+    def validate_fullname(self, fullname):
+        if "<Mod>" in fullname.data:
+            raise ValidationError("You cannot put <Mod> in your fullname.")

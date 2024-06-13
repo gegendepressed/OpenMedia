@@ -42,6 +42,24 @@ class User(Base, UserMixin): # pylint: disable=too-few-public-methods
     def get_id(self):
         return self.username
 
+    def is_moderator(self):
+        if "<Mod>" in self.fullname:
+            return True
+        else:
+            return False
+
+    def promote_to_moderator(self):
+        if " <Mod>" in self.fullname:
+            return True
+        else:
+            self.fullname += " <Mod>"
+            return True
+
+    def demote_moderator(self):
+        if " <Mod>" in self.fullname:
+            self.fullname.replace(" <Mod>","")
+        return True
+
 
 class Likes(Base): # pylint: disable=too-few-public-methods
     """

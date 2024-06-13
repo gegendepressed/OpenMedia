@@ -45,6 +45,7 @@ itsd_salt = os.environ.get("ITSD_SALT") if os.environ.get("ITSD_SALT") else itsd
 reset_pass_serializer = URLSafeTimedSerializer(itsd_secret_key, salt=itsd_salt)
 tz = timezone("Asia/Kolkata")
 
+
 def send_reset_mail(recipient_email, signature):
     msg = Message("Openmedia: Reset Password")
     msg.body = (f"Use this URL to reset your password: {url_for('reset_password', token=signature, _external=True)} \n"
@@ -52,6 +53,18 @@ def send_reset_mail(recipient_email, signature):
                 f"Ignore if not requested")
     msg.add_recipient(recipient_email)
     mail.send(msg)
+
+
+def check_moderator(user):
+    if current_user.is_authenticated:
+        if current_user.is_moderator():
+            return True
+    return False
+
+
+@app.context_processor
+def moderator_processor():
+    return dict(check_moderator=check_moderator)
 
 
 @login_manager.user_loader
@@ -281,8 +294,8 @@ def post(post_id):
 def update_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
         form = PostForm(title=post.title, content=post.text)
-        if post.owner != current_user:
-               return redirect(url_for('post', post_id=post.id))
+        if post.owner != current_user and not check_moderator(current_user):
+            return redirect(url_for('post', post_id=post.id))
         if form.validate_on_submit():
                 post.title = form.title.data
                 post.text = form.content.data
@@ -309,7 +322,7 @@ def update_post(post_id):
 @login_required
 def delete_post(post_id):
         post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
-        if post.owner != current_user:
+        if post.owner != current_user and not check_moderator(current_user):
                return redirect(url_for('post', post_id=post.id))
         else:
             if post.image:
