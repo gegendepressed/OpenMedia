@@ -74,18 +74,15 @@ a.article-title:hover {
         filter: invert(80%);
 }
 
-@media (prefers-color-scheme: dark) {
-        [data-bs-theme=dark] .article-title {
-                color: #C7C9CB
-         
-        }
-
-        [data-bs-theme=dark] .article-content {
-                color: #9BA4B5;
-        }
-
-        [data-bs-theme=dark] .invertOnDark {
-            filter: invert(80%); 
-        } 
-
+[data-bs-theme=dark] .article-title {
+        color: #C7C9CB
+ 
 }
+
+[data-bs-theme=dark] .article-content {
+        color: #9BA4B5;
+}
+
+[data-bs-theme=dark] .invertOnDark {
+    filter: invert(80%); 
+} 
