@@ -2,6 +2,8 @@
 
 OpenMedia: A Social Media WebApp that uses Flask, SQLAlchemy & Bootstrap, built with the intention to learn all these technologies hands on.
 
+Lisence: [MIT](https://github.com/gegendepressed/OpenMedia/blob/master/LISENCE)
+
 This was our B.E course's 4th semester Mini Project
 
 # Features:
