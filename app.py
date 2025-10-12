@@ -15,6 +15,7 @@ import secrets
 from sqlalchemy import delete
 from PIL import Image
 from io import BytesIO
+import requests
 
 login_manager = LoginManager()
 mail = Mail()
@@ -265,6 +266,17 @@ def new_post():
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = db.session.execute(db.select(Posts).where(Posts.id == post_id)).scalar_one_or_none()
+    sentiment_json = {}
+
+    # Get the sentiment analysis of the Post
+    try:
+        res = requests.post("http://localhost:6001/predict_json", 
+            json={"text": post.title + ". " + post.text})
+        sentiment_json = res.json()
+    except: 
+        sentiment_json = {}
+    
+    print(sentiment_json)
     comments_list = post.comments[::-1] if post.comments else []
     if current_user.is_authenticated:
         has_liked = db.session.execute(select(Likes)
@@ -285,9 +297,9 @@ def post(post_id):
             flash('Comment Created!', 'success')
             return redirect(url_for("post", post_id=post_id))
 
-        return render_template('post.html', post=post,datetime=datetime,comments=comments_list,form=form,tz=tz, has_liked=has_liked)
+        return render_template('post.html', post=post,datetime=datetime,comments=comments_list, sentiment_json=sentiment_json,form=form,tz=tz, has_liked=has_liked)
     else:
-        return render_template('post.html', post=post,datetime=datetime,comments=comments_list,form=None,tz=tz)
+        return render_template('post.html', post=post,datetime=datetime,comments=comments_list, sentiment_json=sentiment_json,form=None,tz=tz)
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required

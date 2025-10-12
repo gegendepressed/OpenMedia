@@ -1,4 +1,4 @@
-{% macro render_post(post, datetime, tz) -%}
+{% macro render_post(post, datetime, tz, sentiment_json={}) -%}
     <div class="media-body">
         <div class="article-metadata">
             <div>
@@ -11,7 +11,13 @@
             </div>
         </div>
         <h2><a class="article-title text-decoration-none" href="{{ url_for('post',post_id=post.id) }}">{{ post.title }}</a></h2>
-        <p class="article-content">{{ post.text }}</p>
+        <p class="article-content">{{ post.text }}{% if sentiment_json %}
+                
+                Sentiment Analysis: 
+                Positive: {{ sentiment_json['positive'] }} %
+                Negative: {{ sentiment_json['negative'] }} %
+            {% endif %}</p>
+
         {% if post.image %}
             <img class="card-img-bottom mb-3" src="{{ post.image }}" alt="Card image cap">
         {% endif %}

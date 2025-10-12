@@ -12,3 +12,4 @@ Flask-Mail
 Pillow
 gunicorn
 PyMySQL
+requests

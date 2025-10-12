@@ -3,7 +3,7 @@
 
 {% block content %}
 <article class="media content-section card">
-    {{ macro.render_post(post, datetime, tz) }}
+    {{ macro.render_post(post, datetime, tz, sentiment_json) }}
 </article>
 <li class="button-container d-flex justify-content-between">
     <div class="mt-2 mb-4">
